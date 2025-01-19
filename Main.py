@@ -15,10 +15,19 @@ ADMINS_CSV = "admins.csv"
 def load_data(file_path):
     if os.path.exists(file_path):
         return pd.read_csv(file_path)
+    else:
+        # Si el archivo no existe, crear un DataFrame vacío con las columnas necesarias
+        if file_path == USERS_CSV:
+            return pd.DataFrame(columns=["UsuarioID", "Nombre", "Apellido", "Edad", "Email", "Nacionalidad", "Zona_Principal", "Zona_Secundaria"])
+        elif file_path == ADMINS_CSV:
+            return pd.DataFrame(columns=["AdminID", "Nombre_Club", "Lugar", "Horarios"])
     return pd.DataFrame()
 
 def save_data(data, file_path):
-    data.to_csv(file_path, index=False)
+    try:
+        data.to_csv(file_path, index=False)
+    except Exception as e:
+        st.error(f"Error al guardar los datos: {e}")
 
 def user_registration():
     st.subheader("Registro de Usuario")
