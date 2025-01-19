@@ -5,7 +5,7 @@ from PIL import Image
 
 # Configuración inicial
 st.set_page_config(page_title="Padel Crack", layout="wide")
-st.title("\ud83c\udfbe Padel Crack")
+st.title("🎾 Padel Crack")
 st.sidebar.title("Menú Principal")
 
 # Archivos CSV
@@ -53,7 +53,7 @@ def user_registration():
                     "Zona_Principal": zona_principal,
                     "Zona_Secundaria": zona_secundaria,
                 }
-                users = users.append(nuevo_usuario, ignore_index=True)
+                users = pd.concat([users, pd.DataFrame([nuevo_usuario])], ignore_index=True)
                 save_data(users, USERS_CSV)
                 st.success(f"Usuario registrado con éxito. ID: {user_id}")
 
@@ -80,7 +80,7 @@ def admin_registration():
                 "Lugar": lugar,
                 "Horarios": horarios,
             }
-            admins = admins.append(nuevo_admin, ignore_index=True)
+            admins = pd.concat([admins, pd.DataFrame([nuevo_admin])], ignore_index=True)
             save_data(admins, ADMINS_CSV)
             st.success(f"Administrador registrado con éxito. ID: {admin_id}")
 
@@ -88,7 +88,7 @@ def admin_registration():
 menu = st.sidebar.radio("Selecciona una opción", ["Inicio", "Registro Usuario", "Registro Admin", "Acceso Usuario", "Acceso Admin"])
 
 if menu == "Inicio":
-    st.header("Bienvenido a Padel Crack \ud83c\udfbe")
+    st.header("Bienvenido a Padel Crack 🎾")
     st.write("Una plataforma creada para conectar jugadores, clubes y entrenadores de padel.")
 
 elif menu == "Registro Usuario":
@@ -120,4 +120,3 @@ elif menu == "Acceso Admin":
             # Aquí iría el menú del administrador
         else:
             st.error("AdminID no encontrado.")
-
