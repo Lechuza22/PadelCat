@@ -12,11 +12,16 @@ st.sidebar.title("Menú Principal")
 USERS_CSV = "usuarios.csv"
 ADMINS_CSV = "admins.csv"
 
+def initialize_file(file_path, columns):
+    """Crea un archivo CSV vacío con las columnas especificadas si no existe."""
+    if not os.path.exists(file_path):
+        pd.DataFrame(columns=columns).to_csv(file_path, index=False)
+
 def load_data(file_path):
-    if os.path.exists(file_path):
+    if os.path.exists(file_path) and os.stat(file_path).st_size > 0:
         return pd.read_csv(file_path)
     else:
-        # Si el archivo no existe, crear un DataFrame vacío con las columnas necesarias
+        # Devuelve un DataFrame vacío si el archivo está vacío o no existe
         if file_path == USERS_CSV:
             return pd.DataFrame(columns=["UsuarioID", "Nombre", "Apellido", "Edad", "Email", "Nacionalidad", "Zona_Principal", "Zona_Secundaria"])
         elif file_path == ADMINS_CSV:
@@ -45,6 +50,9 @@ def user_registration():
             if not nombre or not apellido or not email:
                 st.error("Por favor, completa todos los campos obligatorios.")
                 return
+
+            # Asegurarse de que el archivo exista y esté inicializado
+            initialize_file(USERS_CSV, ["UsuarioID", "Nombre", "Apellido", "Edad", "Email", "Nacionalidad", "Zona_Principal", "Zona_Secundaria"])
 
             users = load_data(USERS_CSV)
 
@@ -79,6 +87,9 @@ def admin_registration():
             if not nombre_club or not lugar or not horarios:
                 st.error("Por favor, completa todos los campos obligatorios.")
                 return
+
+            # Asegurarse de que el archivo exista y esté inicializado
+            initialize_file(ADMINS_CSV, ["AdminID", "Nombre_Club", "Lugar", "Horarios"])
 
             admins = load_data(ADMINS_CSV)
 
